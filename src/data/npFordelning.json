@@ -1,54 +1,164 @@
 {
-  "prov": [
-    {
-      "betyg": "F",
-      "andel": 13.5
-    },
-    {
-      "betyg": "E",
-      "andel": 23.8
-    },
-    {
-      "betyg": "D",
-      "andel": 24.6
-    },
-    {
-      "betyg": "C",
-      "andel": 21.2
-    },
-    {
-      "betyg": "B",
-      "andel": 11.4
-    },
-    {
-      "betyg": "A",
-      "andel": 5.5
-    }
-  ],
-  "amne": [
-    {
-      "betyg": "F",
-      "andel": 5.6
-    },
-    {
-      "betyg": "E",
-      "andel": 22.4
-    },
-    {
-      "betyg": "D",
-      "andel": 25.9
-    },
-    {
-      "betyg": "C",
-      "andel": 25
-    },
-    {
-      "betyg": "B",
-      "andel": 14.2
-    },
-    {
-      "betyg": "A",
-      "andel": 6.9
-    }
-  ]
+  "alla": {
+    "prov": [
+      {
+        "betyg": "F",
+        "andel": 13.5
+      },
+      {
+        "betyg": "E",
+        "andel": 23.8
+      },
+      {
+        "betyg": "D",
+        "andel": 24.6
+      },
+      {
+        "betyg": "C",
+        "andel": 21.2
+      },
+      {
+        "betyg": "B",
+        "andel": 11.4
+      },
+      {
+        "betyg": "A",
+        "andel": 5.5
+      }
+    ],
+    "amne": [
+      {
+        "betyg": "F",
+        "andel": 5.6
+      },
+      {
+        "betyg": "E",
+        "andel": 22.4
+      },
+      {
+        "betyg": "D",
+        "andel": 25.9
+      },
+      {
+        "betyg": "C",
+        "andel": 25
+      },
+      {
+        "betyg": "B",
+        "andel": 14.2
+      },
+      {
+        "betyg": "A",
+        "andel": 6.9
+      }
+    ]
+  },
+  "sv": {
+    "prov": [
+      {
+        "betyg": "F",
+        "andel": 10.3
+      },
+      {
+        "betyg": "E",
+        "andel": 22.5
+      },
+      {
+        "betyg": "D",
+        "andel": 25.4
+      },
+      {
+        "betyg": "C",
+        "andel": 22.9
+      },
+      {
+        "betyg": "B",
+        "andel": 12.6
+      },
+      {
+        "betyg": "A",
+        "andel": 6.2
+      }
+    ],
+    "amne": [
+      {
+        "betyg": "F",
+        "andel": 3.6
+      },
+      {
+        "betyg": "E",
+        "andel": 19.9
+      },
+      {
+        "betyg": "D",
+        "andel": 26.3
+      },
+      {
+        "betyg": "C",
+        "andel": 26.8
+      },
+      {
+        "betyg": "B",
+        "andel": 15.6
+      },
+      {
+        "betyg": "A",
+        "andel": 7.8
+      }
+    ]
+  },
+  "sva": {
+    "prov": [
+      {
+        "betyg": "F",
+        "andel": 34.8
+      },
+      {
+        "betyg": "E",
+        "andel": 32.1
+      },
+      {
+        "betyg": "D",
+        "andel": 19.2
+      },
+      {
+        "betyg": "C",
+        "andel": 9.5
+      },
+      {
+        "betyg": "B",
+        "andel": 3.4
+      },
+      {
+        "betyg": "A",
+        "andel": 0.9
+      }
+    ],
+    "amne": [
+      {
+        "betyg": "F",
+        "andel": 19
+      },
+      {
+        "betyg": "E",
+        "andel": 39
+      },
+      {
+        "betyg": "D",
+        "andel": 23.3
+      },
+      {
+        "betyg": "C",
+        "andel": 13.1
+      },
+      {
+        "betyg": "B",
+        "andel": 4.8
+      },
+      {
+        "betyg": "A",
+        "andel": 0.8
+      }
+    ]
+  }
 }

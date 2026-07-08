@@ -10,10 +10,24 @@
   import ResearchCards from "../components/ResearchCards.svelte";
   import SimpleView from "../components/SimpleView.svelte";
   import LasValjare from "../components/LasValjare.svelte";
+  import KursplanVal from "../components/KursplanVal.svelte";
 
   let { data } = $props();
 
   let currentStep = $state(0);
+
+  // Kursplan-vyn för resultatdiagrammen: "alla" (viktad helhet, default så
+  // att brödtextens totalsiffror stämmer med det som visas), "sv" eller
+  // "sva". Valet följer med mellan stegen.
+  let kursplanVy = $state("alla");
+  const SPLIT_STEPS = new Set([0, 1, 3, 4, 13, 16, 17]);
+  const vySuffix = $derived(
+    kursplanVy === "sv"
+      ? " · kursplan svenska"
+      : kursplanVy === "sva"
+        ? " · kursplan svenska som andraspråk"
+        : ""
+  );
 
   const ov = data.overview;
 
@@ -34,7 +48,7 @@
   const npBars = $derived(
     BETYG_ORDNING.map((b) => ({
       label: b === "F" ? "F — inte godkänt" : b,
-      value: data.npFordelning.prov.find((d) => d.betyg === b).andel,
+      value: data.npFordelning[kursplanVy].prov.find((d) => d.betyg === b).andel,
       color: b === "F" ? BETYG_COLOR.F : "var(--series-blue)",
     }))
   );
@@ -45,30 +59,31 @@
       id: "prov",
       label: "F på läsförståelsedelprovet (NP)",
       color: "var(--series-red)",
-      serie: data.fTrend.map((d) => ({ x: d.ar, y: d.provbetygF })),
+      serie: data.fTrend[kursplanVy].map((d) => ({ x: d.ar, y: d.provbetygF })),
     },
     {
       id: "amne",
       label: "F i ämnesbetyg, båda kursplanerna",
       color: "var(--series-blue)",
-      serie: data.fTrend.map((d) => ({ x: d.ar, y: d.amnesbetygF })),
+      serie: data.fTrend[kursplanVy].map((d) => ({ x: d.ar, y: d.amnesbetygF })),
     },
   ]);
 
-  // Steg 2 — de 1 004 utan behörighet
+  // Steg 3 — de 1 004 utan behörighet (per vald kursplan-vy)
+  const beh = $derived(data.kursplaner.behorighet[kursplanVy]);
   const waffleGroups = $derived([
     {
-      count: ov.obehorigaEndastSvenska,
+      count: beh.endast,
       color: "#a7391d",
       label: "saknar godkänt ENBART i svenskämnet",
     },
     {
-      count: ov.obehorigaMedFSvenska - ov.obehorigaEndastSvenska,
+      count: beh.medF - beh.endast,
       color: "#cc8370",
       label: "saknar svenskämnet + fler ämnen",
     },
     {
-      count: ov.obehoriga - ov.obehorigaMedFSvenska,
+      count: beh.obehoriga - beh.medF,
       color: "#9aa7b4",
       label: "obehöriga av andra skäl (godkänt i svenskämnet)",
     },
@@ -90,7 +105,7 @@
   const matrisRows = BETYG_ORDNING;
   const matrisCols = ["F", "E", "D", "C", "B", "A"];
   const matrisCells = $derived(
-    data.betygMatris.map((d) => ({ row: d.provbetyg, col: d.amnesbetyg, value: d.andel }))
+    data.betygMatris[kursplanVy].map((d) => ({ row: d.provbetyg, col: d.amnesbetyg, value: d.andel }))
   );
 
   // Steg 11 — kohortens tre kontrollstationer
@@ -99,7 +114,7 @@
       id: "kohort",
       label: "av årskullen",
       color: "var(--series-red)",
-      serie: data.kohort.checkpoints.map((c) => ({
+      serie: data.kohort.checkpoints[kursplanVy].map((c) => ({
         x: `${c.label} · ${c.ar}`,
         y: c.andel,
       })),
@@ -143,7 +158,7 @@
   // Steg 16 — bedömningsstödet i åk 1
   const NIVA_COLOR = { lagre: "#a7391d", mellan: "#9cc0dd", hogre: "#0068b2" };
   const bedomningsRows = $derived(
-    data.tidigaSignaler.bedomningsstod.map((d) => ({
+    data.tidigaSignaler.bedomningsstod[kursplanVy].map((d) => ({
       label: d.termin,
       parts: [
         { key: "Lägre nivå — behöver stöd", value: d.lagre, color: NIVA_COLOR.lagre },
@@ -160,7 +175,7 @@
 
   // Steg 15 — NP åk 3, läsdelproven B–E
   const delprovBars = $derived(
-    data.tidigaSignaler.npAk3Delprov.map((d, i) => ({
+    data.tidigaSignaler.npAk3Delprov[kursplanVy].map((d, i) => ({
       label: d.delprov,
       value: d.andel,
       color: i < 2 ? "var(--series-red)" : "var(--series-blue)",
@@ -255,6 +270,11 @@
 <Scrolly onStepChange={(i) => (currentStep = i)}>
   {#snippet visual()}
     <div class="visual-stack">
+      {#if SPLIT_STEPS.has(currentStep)}
+        <div class="kursplanval-wrap" transition:fade={{ duration: 200 }}>
+          <KursplanVal value={kursplanVy} onChange={(v) => (kursplanVy = v)} />
+        </div>
+      {/if}
       <!-- Repet ligger kvar monterat över repstegen (utanför {#key}) så att
            lägena tweenas mjukt i stället för att ritas om. -->
       {#if ropeMode}
@@ -267,13 +287,13 @@
           {#if currentStep === 0}
             <BarChart
               data={npBars}
-              title="Provbetyg på läsförståelsedelen (delprov B), nationella provet i svenska åk 9, våren 2025"
+              title={"Provbetyg på läsförståelsedelen (delprov B), nationella provet åk 9, våren 2025" + vySuffix}
               maxValue={30}
             />
           {:else if currentStep === 1}
             <LineChart
               series={trendSeries}
-              title="Andel elever med F i läsning/svenskämnena åk 9, 2015–2025"
+              title={"Andel elever med F i läsning åk 9, 2015–2025" + vySuffix}
               note="Nationella proven ställdes in 2020–2021 (pandemin)."
             />
           {:else if currentStep === 2}
@@ -292,7 +312,7 @@
               rows={matrisRows}
               cols={matrisCols}
               data={matrisCells}
-              title="Andel av eleverna per kombination av provbetyg (läsförståelse) och ämnesbetyg i svenska, åk 9 våren 2025"
+              title={"Andel av eleverna per kombination av provbetyg (läsförståelse) och ämnesbetyg, åk 9 våren 2025" + vySuffix}
               rowTitle="Provbetyg (NP)"
               colTitle="Ämnesbetyg"
               lowLabel="Få elever"
@@ -319,7 +339,7 @@
               series={kohortSeries}
               unit="%"
               labelAll={true}
-              title="Samma årskull vid tre kontrollstationer: andel under kravnivån/med F på nationella provets läsdel"
+              title={"Samma årskull vid tre kontrollstationer: andel under kravnivån/med F på nationella provets läsdel" + vySuffix}
             />
           {:else if currentStep === 14}
             <StackedBars
@@ -337,12 +357,12 @@
             <StackedBars
               rows={bedomningsRows}
               legend={bedomningsLegend}
-              title="Bedömningsstödet i läs- och skrivutveckling, hösten åk 1 — andel elever per nivå"
+              title={"Bedömningsstödet i läs- och skrivutveckling, hösten åk 1 — andel elever per nivå" + vySuffix}
             />
           {:else if currentStep === 17}
             <BarChart
               data={delprovBars}
-              title="Nationella provet i svenska åk 3 (våren 2025): andel som inte nådde kravnivån, per läsdelprov"
+              title={"Nationella provet åk 3 (våren 2025): andel som inte nådde kravnivån, per läsdelprov" + vySuffix}
               maxValue={20}
             />
           {/if}
@@ -568,9 +588,9 @@
           våren 2022, åk 9 våren 2025.
         </p>
         <p>
-          Kurvan gör något lömskt: {dec(data.kohort.checkpoints[0].andel)}&nbsp;% →
-          {dec(data.kohort.checkpoints[1].andel)}&nbsp;% →
-          <strong>{dec(data.kohort.checkpoints[2].andel)}&nbsp;%</strong>.
+          Kurvan gör något lömskt: {dec(data.kohort.checkpoints.alla[0].andel)}&nbsp;% →
+          {dec(data.kohort.checkpoints.alla[1].andel)}&nbsp;% →
+          <strong>{dec(data.kohort.checkpoints.alla[2].andel)}&nbsp;%</strong>.
           Den <em>sjunker</em> mot sexan — och stiger igen mot nian. Det är
           fjärdeklass-skiftet i data: lågstadiets korta texter klarar även den
           med tunna trådar. Sedan tätnar texterna, och gapet öppnar sig igen.
@@ -687,6 +707,11 @@
     width: 100%;
     display: flex;
     justify-content: center;
+  }
+  .kursplanval-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
   }
   :global(.scrolly-step) {
     background: var(--surface-1);

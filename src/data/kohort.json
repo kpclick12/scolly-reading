@@ -1,25 +1,67 @@
 {
   "beskrivning": "Årskullen som gick ut åk 9 våren 2025",
-  "checkpoints": [
-    {
-      "label": "Åk 3",
-      "ar": 2019,
-      "matt": "NP: under kravnivån, läsförståelse",
-      "andel": 11.8
-    },
-    {
-      "label": "Åk 6",
-      "ar": 2022,
-      "matt": "NP läsförståelse: provbetyg F",
-      "andel": 9.2
-    },
-    {
-      "label": "Åk 9",
-      "ar": 2025,
-      "matt": "NP läsförståelse: provbetyg F",
-      "andel": 13.5
-    }
-  ],
+  "checkpoints": {
+    "alla": [
+      {
+        "label": "Åk 3",
+        "ar": 2019,
+        "matt": "NP: under kravnivån, läsförståelse",
+        "andel": 11.8
+      },
+      {
+        "label": "Åk 6",
+        "ar": 2022,
+        "matt": "NP läsförståelse: provbetyg F",
+        "andel": 9.2
+      },
+      {
+        "label": "Åk 9",
+        "ar": 2025,
+        "matt": "NP läsförståelse: provbetyg F",
+        "andel": 13.5
+      }
+    ],
+    "sv": [
+      {
+        "label": "Åk 3",
+        "ar": 2019,
+        "matt": "NP: under kravnivån, läsförståelse",
+        "andel": 8.7
+      },
+      {
+        "label": "Åk 6",
+        "ar": 2022,
+        "matt": "NP läsförståelse: provbetyg F",
+        "andel": 6.4
+      },
+      {
+        "label": "Åk 9",
+        "ar": 2025,
+        "matt": "NP läsförståelse: provbetyg F",
+        "andel": 10.3
+      }
+    ],
+    "sva": [
+      {
+        "label": "Åk 3",
+        "ar": 2019,
+        "matt": "NP: under kravnivån, läsförståelse",
+        "andel": 32.8
+      },
+      {
+        "label": "Åk 6",
+        "ar": 2022,
+        "matt": "NP läsförståelse: provbetyg F",
+        "andel": 27.9
+      },
+      {
+        "label": "Åk 9",
+        "ar": 2025,
+        "matt": "NP läsförståelse: provbetyg F",
+        "andel": 34.8
+      }
+    ]
+  },
   "villkorade": {
     "underAk3": {
       "grupp": "Missade läsdelprov på NP i åk 3",
@@ -27,19 +69,19 @@
       "ak9": [
         {
           "betyg": "F",
-          "andel": 27.1
+          "andel": 27.5
         },
         {
           "betyg": "E",
-          "andel": 53.8
+          "andel": 53.6
         },
         {
           "betyg": "D",
-          "andel": 15.7
+          "andel": 15.2
         },
         {
           "betyg": "C",
-          "andel": 3.4
+          "andel": 3.8
         },
         {
           "betyg": "B",
@@ -57,7 +99,7 @@
       "ak9": [
         {
           "betyg": "F",
-          "andel": 0.8
+          "andel": 0.7
         },
         {
           "betyg": "E",
@@ -65,7 +107,7 @@
         },
         {
           "betyg": "D",
-          "andel": 28.2
+          "andel": 28.3
         },
         {
           "betyg": "C",
@@ -81,23 +123,23 @@
         }
       ]
     },
-    "fAndelUnder": 27.1,
-    "fAndelNadde": 0.8
+    "fAndelUnder": 27.5,
+    "fAndelNadde": 0.7
   },
   "fEfterAk6": [
     {
       "betygAk6": "F",
-      "andelFAk9": 78.8,
+      "andelFAk9": 75.2,
       "antal": 226
     },
     {
       "betygAk6": "E",
-      "andelFAk9": 11.8,
+      "andelFAk9": 12.2,
       "antal": 1242
     },
     {
       "betygAk6": "D",
-      "andelFAk9": 0.1,
+      "andelFAk9": 0.2,
       "antal": 1440
     },
     {

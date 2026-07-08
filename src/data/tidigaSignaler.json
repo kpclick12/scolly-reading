@@ -1,42 +1,122 @@
 {
-  "bedomningsstod": [
-    {
-      "termin": "HT 2023",
-      "lagre": 12.9,
-      "mellan": 26.3,
-      "hogre": 60.8
-    },
-    {
-      "termin": "HT 2024",
-      "lagre": 14.2,
-      "mellan": 26.6,
-      "hogre": 59.2
-    },
-    {
-      "termin": "HT 2025",
-      "lagre": 15.4,
-      "mellan": 27.1,
-      "hogre": 57.5
-    }
-  ],
-  "npAk3Delprov": [
-    {
-      "delprov": "Läsa sakprosa (C)",
-      "andel": 13.6
-    },
-    {
-      "delprov": "Läsa berättande text (B)",
-      "andel": 11.8
-    },
-    {
-      "delprov": "Enskild högläsning (D)",
-      "andel": 9.2
-    },
-    {
-      "delprov": "Textsamtal (E)",
-      "andel": 7.4
-    }
-  ],
+  "bedomningsstod": {
+    "sv": [
+      {
+        "termin": "HT 2023",
+        "lagre": 11.2,
+        "mellan": 25.7,
+        "hogre": 63.1
+      },
+      {
+        "termin": "HT 2024",
+        "lagre": 12.4,
+        "mellan": 26,
+        "hogre": 61.6
+      },
+      {
+        "termin": "HT 2025",
+        "lagre": 13.5,
+        "mellan": 26.4,
+        "hogre": 60.1
+      }
+    ],
+    "sva": [
+      {
+        "termin": "HT 2023",
+        "lagre": 23.5,
+        "mellan": 30,
+        "hogre": 46.5
+      },
+      {
+        "termin": "HT 2024",
+        "lagre": 25.5,
+        "mellan": 30.3,
+        "hogre": 44.2
+      },
+      {
+        "termin": "HT 2025",
+        "lagre": 27.3,
+        "mellan": 31.4,
+        "hogre": 41.3
+      }
+    ],
+    "alla": [
+      {
+        "termin": "HT 2023",
+        "lagre": 12.9,
+        "mellan": 26.3,
+        "hogre": 60.8
+      },
+      {
+        "termin": "HT 2024",
+        "lagre": 14.2,
+        "mellan": 26.6,
+        "hogre": 59.2
+      },
+      {
+        "termin": "HT 2025",
+        "lagre": 15.4,
+        "mellan": 27.1,
+        "hogre": 57.5
+      }
+    ]
+  },
+  "npAk3Delprov": {
+    "sv": [
+      {
+        "delprov": "Läsa sakprosa (C)",
+        "andel": 11
+      },
+      {
+        "delprov": "Läsa berättande text (B)",
+        "andel": 9.6
+      },
+      {
+        "delprov": "Enskild högläsning (D)",
+        "andel": 8
+      },
+      {
+        "delprov": "Textsamtal (E)",
+        "andel": 6.2
+      }
+    ],
+    "sva": [
+      {
+        "delprov": "Läsa sakprosa (C)",
+        "andel": 29.5
+      },
+      {
+        "delprov": "Läsa berättande text (B)",
+        "andel": 25.3
+      },
+      {
+        "delprov": "Enskild högläsning (D)",
+        "andel": 16.5
+      },
+      {
+        "delprov": "Textsamtal (E)",
+        "andel": 14.8
+      }
+    ],
+    "alla": [
+      {
+        "delprov": "Läsa sakprosa (C)",
+        "andel": 13.6
+      },
+      {
+        "delprov": "Läsa berättande text (B)",
+        "andel": 11.8
+      },
+      {
+        "delprov": "Enskild högläsning (D)",
+        "andel": 9.2
+      },
+      {
+        "delprov": "Textsamtal (E)",
+        "andel": 7.4
+      }
+    ]
+  },
   "npAk3MinstEtt": 18.3,
   "npAk3Ar": 2025
 }

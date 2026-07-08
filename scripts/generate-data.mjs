@@ -81,6 +81,14 @@ assignByQuantile(
   "ak3",
   ["under", "nadde"]
 );
+// Enbart läsförståelsedelprovet i åk 3 (kohortkurvans jämförbara mått): 11,8 %.
+assignByQuantile(
+  students,
+  (s) => s.theta3 + 0.5 * randn(),
+  [0.118],
+  "ak3las",
+  ["under", "nadde"]
+);
 
 // Åk 6 vt 2022 — läsförståelsedelprovet (NP delprov B) och ämnesbetyg svenska.
 // NP är hårdare; ämnesbetyget lyfter elever nära gränsen ("snällbetyg").
@@ -146,17 +154,22 @@ const nadde3 = students.filter((s) => s.ak3 === "nadde");
 const fordelning = (grupp, key) =>
   BETYG.map((b) => ({ betyg: b, andel: share(grupp, (s) => s[key] === b) }));
 
-// Provbetyg × ämnesbetyg-matrisen (andel av alla elever per cell)
-const matris = [];
-for (const p of BETYG) {
-  for (const a of BETYG) {
-    matris.push({
-      provbetyg: p,
-      amnesbetyg: a,
-      andel: pct((students.filter((s) => s.np9 === p && s.amne9 === a).length / N) * 100),
-    });
+// Provbetyg × ämnesbetyg-matrisen (andel av gruppens elever per cell).
+// Alla resultatvyer finns i tre varianter: båda kursplanerna, svenska, sva —
+// väljbara i sidans kursplan-knappar. "alla" är alltid den viktade helheten.
+const matrisFor = (grupp) => {
+  const ut = [];
+  for (const p of BETYG) {
+    for (const a of BETYG) {
+      ut.push({
+        provbetyg: p,
+        amnesbetyg: a,
+        andel: pct((grupp.filter((s) => s.np9 === p && s.amne9 === a).length / grupp.length) * 100),
+      });
+    }
   }
-}
+  return ut;
+};
 const npFHojda = share(students.filter((s) => s.np9 === "F"), (s) => s.amne9 !== "F");
 
 // F i åk 9 efter betyg i åk 6 — "få tar sig tillbaka"
@@ -208,6 +221,15 @@ const kursplaner = {
     sv: share(svGrupp.filter((s) => s.amne6 === b), (s) => s.amne9 === "F"),
     sva: share(svaGrupp.filter((s) => s.amne6 === b), (s) => s.amne9 === "F"),
   })),
+  // Behörighetsbilden (dotwaffle) per kursplan — absoluta elever.
+  behorighet: Object.fromEntries(
+    [["alla", students], ["sv", svGrupp], ["sva", svaGrupp]].map(([k, g]) => {
+      const medF = g.filter((s) => s.amne9 === "F").length;
+      const endast = g.filter((s) => s.amne9 === "F" && s.endastSvenska).length;
+      const annat = g.filter((s) => s.obehorigAnnat).length;
+      return [k, { obehoriga: medF + annat, medF, endast }];
+    })
+  ),
 };
 
 const overview = {
@@ -223,15 +245,21 @@ const overview = {
   npFHojdaTillE: npFHojda,
 };
 
+// Jämförbart mått i alla tre kontrollstationer: läsförståelsedelprovet.
+// (Villkorandet nedan använder det bredare "missade minst ett läsdelprov".)
+const checkpointsFor = (grupp) => [
+  { label: "Åk 3", ar: 2019, matt: "NP: under kravnivån, läsförståelse", andel: share(grupp, (s) => s.ak3las === "under") },
+  { label: "Åk 6", ar: 2022, matt: "NP läsförståelse: provbetyg F", andel: share(grupp, (s) => s.np6 === "F") },
+  { label: "Åk 9", ar: 2025, matt: "NP läsförståelse: provbetyg F", andel: share(grupp, (s) => s.np9 === "F") },
+];
+
 const kohort = {
   beskrivning: "Årskullen som gick ut åk 9 våren 2025",
-  checkpoints: [
-    // Jämförbart mått i alla tre punkter: läsförståelsedelprovet. (Villkorandet
-    // nedan använder det bredare "missade minst ett läsdelprov", 18,3 %.)
-    { label: "Åk 3", ar: 2019, matt: "NP: under kravnivån, läsförståelse", andel: 11.8 },
-    { label: "Åk 6", ar: 2022, matt: "NP läsförståelse: provbetyg F", andel: pct(NP6_F * 100) },
-    { label: "Åk 9", ar: 2025, matt: "NP läsförståelse: provbetyg F", andel: pct(NP9.F * 100) },
-  ],
+  checkpoints: {
+    alla: checkpointsFor(students),
+    sv: checkpointsFor(svGrupp),
+    sva: checkpointsFor(svaGrupp),
+  },
   villkorade: {
     underAk3: { grupp: "Missade läsdelprov på NP i åk 3", antal: under3.length, ak9: fordelning(under3, "amne9") },
     naddeAk3: { grupp: "Klarade läsdelproven i åk 3", antal: nadde3.length, ak9: fordelning(nadde3, "amne9") },
@@ -242,32 +270,85 @@ const kohort = {
 };
 
 // F-trend åk 9, 2015–2025. NP ställdes in 2020 och 2021 (pandemin).
-const fTrend = [];
-const amneStart = 3.4, amneEnd = overview.amnesbetygFProcent;
-const npStart = 9.8, npEnd = overview.npAndelF;
-for (let ar = 2015; ar <= 2025; ar++) {
-  const t = (ar - 2015) / 10;
-  const wobble = () => (rand() - 0.5) * 0.4;
-  const amne = ar === 2025 ? amneEnd : pct(amneStart + (amneEnd - amneStart) * t ** 1.35 + wobble());
-  const np = ar === 2020 || ar === 2021 ? null : ar === 2025 ? npEnd : pct(npStart + (npEnd - npStart) * t ** 1.2 + wobble());
-  fTrend.push({ ar, amnesbetygF: amne, provbetygF: np });
-}
+// Genereras per kursplan; "alla" är den viktade helheten, så att de tre
+// vyerna i kursplan-knapparna alltid är inbördes konsistenta.
+const trendFor = (amneStart, amneEnd, npStart, npEnd, wobbleAmp) => {
+  const ut = [];
+  for (let ar = 2015; ar <= 2025; ar++) {
+    const t = (ar - 2015) / 10;
+    const wobble = () => (rand() - 0.5) * wobbleAmp;
+    const amne = ar === 2025 ? amneEnd : pct(amneStart + (amneEnd - amneStart) * t ** 1.35 + wobble());
+    const np = ar === 2020 || ar === 2021 ? null : ar === 2025 ? npEnd : pct(npStart + (npEnd - npStart) * t ** 1.2 + wobble());
+    ut.push({ ar, amnesbetygF: amne, provbetygF: np });
+  }
+  return ut;
+};
+const svShare = svGrupp.length / N;
+const trendSv = trendFor(2.6, kursplaner.amne9F.sv, 7.6, kursplaner.np9F.sv, 0.3);
+const trendSva = trendFor(11.5, kursplaner.amne9F.sva, 25.5, kursplaner.np9F.sva, 0.9);
+const fTrend = {
+  sv: trendSv,
+  sva: trendSva,
+  alla: trendSv.map((d, i) => ({
+    ar: d.ar,
+    amnesbetygF: pct(svShare * d.amnesbetygF + (1 - svShare) * trendSva[i].amnesbetygF),
+    provbetygF:
+      d.provbetygF == null
+        ? null
+        : pct(svShare * d.provbetygF + (1 - svShare) * trendSva[i].provbetygF),
+  })),
+};
 
-// Tidiga signaler.
+// Tidiga signaler. Handsatta nivåer per kursplan; "alla" viktas ihop
+// (sva-andelen antas vara ~14 % även i de yngre årskullarna).
+const SVA_UNG = 0.14;
+const vikta = (sv, sva) => pct((1 - SVA_UNG) * sv + SVA_UNG * sva);
+
 // Skolverkets obligatoriska bedömningsstöd i läs- och skrivutveckling,
 // hösten åk 1 (tre höstar).
-const bedomningsstod = [
-  { termin: "HT 2023", lagre: 12.9, mellan: 26.3, hogre: 60.8 },
-  { termin: "HT 2024", lagre: 14.2, mellan: 26.6, hogre: 59.2 },
-  { termin: "HT 2025", lagre: 15.4, mellan: 27.1, hogre: 57.5 },
+const bedomningsstodSv = [
+  { termin: "HT 2023", lagre: 11.2, mellan: 25.7, hogre: 63.1 },
+  { termin: "HT 2024", lagre: 12.4, mellan: 26.0, hogre: 61.6 },
+  { termin: "HT 2025", lagre: 13.5, mellan: 26.4, hogre: 60.1 },
 ];
+const bedomningsstodSva = [
+  { termin: "HT 2023", lagre: 23.5, mellan: 30.0, hogre: 46.5 },
+  { termin: "HT 2024", lagre: 25.5, mellan: 30.3, hogre: 44.2 },
+  { termin: "HT 2025", lagre: 27.3, mellan: 31.4, hogre: 41.3 },
+];
+const bedomningsstod = {
+  sv: bedomningsstodSv,
+  sva: bedomningsstodSva,
+  alla: bedomningsstodSv.map((d, i) => ({
+    termin: d.termin,
+    lagre: vikta(d.lagre, bedomningsstodSva[i].lagre),
+    mellan: vikta(d.mellan, bedomningsstodSva[i].mellan),
+    hogre: vikta(d.hogre, bedomningsstodSva[i].hogre),
+  })),
+};
+
 // NP svenska åk 3 vt 2025 — läsdelproven B–E, andel som EJ nådde kravnivån.
-const npAk3Delprov = [
-  { delprov: "Läsa sakprosa (C)", andel: 13.6 },
-  { delprov: "Läsa berättande text (B)", andel: 11.8 },
-  { delprov: "Enskild högläsning (D)", andel: 9.2 },
-  { delprov: "Textsamtal (E)", andel: 7.4 },
+const npAk3DelprovSv = [
+  { delprov: "Läsa sakprosa (C)", andel: 11.0 },
+  { delprov: "Läsa berättande text (B)", andel: 9.6 },
+  { delprov: "Enskild högläsning (D)", andel: 8.0 },
+  { delprov: "Textsamtal (E)", andel: 6.2 },
 ];
+const npAk3DelprovSva = [
+  { delprov: "Läsa sakprosa (C)", andel: 29.5 },
+  { delprov: "Läsa berättande text (B)", andel: 25.3 },
+  { delprov: "Enskild högläsning (D)", andel: 16.5 },
+  { delprov: "Textsamtal (E)", andel: 14.8 },
+];
+const npAk3Delprov = {
+  sv: npAk3DelprovSv,
+  sva: npAk3DelprovSva,
+  alla: npAk3DelprovSv.map((d, i) => ({
+    delprov: d.delprov,
+    andel: vikta(d.andel, npAk3DelprovSva[i].andel),
+  })),
+};
+
 const tidigaSignaler = {
   bedomningsstod,
   npAk3Delprov,
@@ -276,8 +357,15 @@ const tidigaSignaler = {
 };
 
 const npFordelning = {
-  prov: fordelning(students, "np9"),
-  amne: fordelning(students, "amne9"),
+  alla: { prov: fordelning(students, "np9"), amne: fordelning(students, "amne9") },
+  sv: { prov: fordelning(svGrupp, "np9"), amne: fordelning(svGrupp, "amne9") },
+  sva: { prov: fordelning(svaGrupp, "np9"), amne: fordelning(svaGrupp, "amne9") },
+};
+
+const betygMatris = {
+  alla: matrisFor(students),
+  sv: matrisFor(svGrupp),
+  sva: matrisFor(svaGrupp),
 };
 
 // ----------------------------------------------------------------- skriv ----
@@ -285,7 +373,7 @@ const files = {
   "overview.json": overview,
   "fTrend.json": fTrend,
   "npFordelning.json": npFordelning,
-  "betygMatris.json": matris,
+  "betygMatris.json": betygMatris,
   "kohort.json": kohort,
   "tidigaSignaler.json": tidigaSignaler,
   "kursplaner.json": kursplaner,

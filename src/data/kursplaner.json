@@ -5,21 +5,21 @@
   },
   "andelSva": 13,
   "np9F": {
-    "sv": 10.4,
-    "sva": 34.5
+    "sv": 10.3,
+    "sva": 34.8
   },
   "amne9F": {
-    "sv": 3.7,
-    "sva": 18.4
+    "sv": 3.6,
+    "sva": 19
   },
   "antalF": {
-    "sv": 186,
-    "sva": 139
+    "sv": 181,
+    "sva": 144
   },
   "villkorat": {
     "sv": {
       "fAndelUnder": 22.1,
-      "fAndelNadde": 0.7,
+      "fAndelNadde": 0.6,
       "antalUnder": 712,
       "antalNadde": 4336,
       "ak9Under": [
@@ -29,15 +29,15 @@
         },
         {
           "betyg": "E",
-          "andel": 54.8
+          "andel": 54.4
         },
         {
           "betyg": "D",
-          "andel": 18.7
+          "andel": 18.3
         },
         {
           "betyg": "C",
-          "andel": 4.5
+          "andel": 5.3
         },
         {
           "betyg": "B",
@@ -51,11 +51,11 @@
       "ak9Nadde": [
         {
           "betyg": "F",
-          "andel": 0.7
+          "andel": 0.6
         },
         {
           "betyg": "E",
-          "andel": 14.2
+          "andel": 14.3
         },
         {
           "betyg": "D",
@@ -67,35 +67,35 @@
         },
         {
           "betyg": "B",
-          "andel": 18.3
+          "andel": 18.2
         },
         {
           "betyg": "A",
-          "andel": 9
+          "andel": 9.1
         }
       ]
     },
     "sva": {
-      "fAndelUnder": 37.4,
-      "fAndelNadde": 2,
+      "fAndelUnder": 38.6,
+      "fAndelNadde": 2.2,
       "antalUnder": 350,
       "antalNadde": 406,
       "ak9Under": [
         {
           "betyg": "F",
-          "andel": 37.4
+          "andel": 38.6
         },
         {
           "betyg": "E",
-          "andel": 51.7
+          "andel": 52
         },
         {
           "betyg": "D",
-          "andel": 9.7
+          "andel": 8.9
         },
         {
           "betyg": "C",
-          "andel": 1.1
+          "andel": 0.6
         },
         {
           "betyg": "B",
@@ -109,27 +109,27 @@
       "ak9Nadde": [
         {
           "betyg": "F",
-          "andel": 2
+          "andel": 2.2
         },
         {
           "betyg": "E",
-          "andel": 28.1
+          "andel": 27.8
         },
         {
           "betyg": "D",
-          "andel": 34.7
+          "andel": 35.7
         },
         {
           "betyg": "C",
-          "andel": 25.1
+          "andel": 23.9
         },
         {
           "betyg": "B",
-          "andel": 8.1
+          "andel": 8.9
         },
         {
           "betyg": "A",
-          "andel": 2
+          "andel": 1.5
         }
       ]
     }
@@ -137,13 +137,30 @@
   "fEfterAk6": [
     {
       "betygAk6": "F",
-      "sv": 77.5,
-      "sva": 80
+      "sv": 71.8,
+      "sva": 78.9
     },
     {
       "betygAk6": "E",
-      "sv": 10.5,
-      "sva": 15.6
+      "sv": 10.3,
+      "sva": 17.8
     }
-  ]
+  ],
+  "behorighet": {
+    "alla": {
+      "obehoriga": 1004,
+      "medF": 325,
+      "endast": 118
+    },
+    "sv": {
+      "obehoriga": 694,
+      "medF": 181,
+      "endast": 71
+    },
+    "sva": {
+      "obehoriga": 310,
+      "medF": 144,
+      "endast": 47
+    }
+  }
 }
