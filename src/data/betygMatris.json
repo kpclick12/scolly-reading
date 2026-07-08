@@ -1,0 +1,182 @@
+[
+  {
+    "provbetyg": "F",
+    "amnesbetyg": "F",
+    "andel": 5.5
+  },
+  {
+    "provbetyg": "F",
+    "amnesbetyg": "E",
+    "andel": 7.8
+  },
+  {
+    "provbetyg": "F",
+    "amnesbetyg": "D",
+    "andel": 0.1
+  },
+  {
+    "provbetyg": "F",
+    "amnesbetyg": "C",
+    "andel": 0
+  },
+  {
+    "provbetyg": "F",
+    "amnesbetyg": "B",
+    "andel": 0
+  },
+  {
+    "provbetyg": "F",
+    "amnesbetyg": "A",
+    "andel": 0
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "F",
+    "andel": 0.1
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "E",
+    "andel": 13.4
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "D",
+    "andel": 10
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "C",
+    "andel": 0.4
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "B",
+    "andel": 0
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "A",
+    "andel": 0
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "F",
+    "andel": 0
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "E",
+    "andel": 1.2
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "D",
+    "andel": 14.1
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "C",
+    "andel": 9
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "B",
+    "andel": 0.3
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "A",
+    "andel": 0
+  },
+  {
+    "provbetyg": "C",
+    "amnesbetyg": "F",
+    "andel": 0
+  },
+  {
+    "provbetyg": "C",
+    "amnesbetyg": "E",
+    "andel": 0
+  },
+  {
+    "provbetyg": "C",
+    "amnesbetyg": "D",
+    "andel": 1.7
+  },
+  {
+    "provbetyg": "C",
+    "amnesbetyg": "C",
+    "andel": 14.1
+  },
+  {
+    "provbetyg": "C",
+    "amnesbetyg": "B",
+    "andel": 5.2
+  },
+  {
+    "provbetyg": "C",
+    "amnesbetyg": "A",
+    "andel": 0.2
+  },
+  {
+    "provbetyg": "B",
+    "amnesbetyg": "F",
+    "andel": 0
+  },
+  {
+    "provbetyg": "B",
+    "amnesbetyg": "E",
+    "andel": 0
+  },
+  {
+    "provbetyg": "B",
+    "amnesbetyg": "D",
+    "andel": 0
+  },
+  {
+    "provbetyg": "B",
+    "amnesbetyg": "C",
+    "andel": 1.5
+  },
+  {
+    "provbetyg": "B",
+    "amnesbetyg": "B",
+    "andel": 7.6
+  },
+  {
+    "provbetyg": "B",
+    "amnesbetyg": "A",
+    "andel": 2.3
+  },
+  {
+    "provbetyg": "A",
+    "amnesbetyg": "F",
+    "andel": 0
+  },
+  {
+    "provbetyg": "A",
+    "amnesbetyg": "E",
+    "andel": 0
+  },
+  {
+    "provbetyg": "A",
+    "amnesbetyg": "D",
+    "andel": 0
+  },
+  {
+    "provbetyg": "A",
+    "amnesbetyg": "C",
+    "andel": 0
+  },
+  {
+    "provbetyg": "A",
+    "amnesbetyg": "B",
+    "andel": 1
+  },
+  {
+    "provbetyg": "A",
+    "amnesbetyg": "A",
+    "andel": 4.5
+  }
+]

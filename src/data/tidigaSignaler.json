@@ -1,0 +1,42 @@
+{
+  "bedomningsstod": [
+    {
+      "termin": "HT 2023",
+      "lagre": 12.9,
+      "mellan": 26.3,
+      "hogre": 60.8
+    },
+    {
+      "termin": "HT 2024",
+      "lagre": 14.2,
+      "mellan": 26.6,
+      "hogre": 59.2
+    },
+    {
+      "termin": "HT 2025",
+      "lagre": 15.4,
+      "mellan": 27.1,
+      "hogre": 57.5
+    }
+  ],
+  "npAk3Delprov": [
+    {
+      "delprov": "Läsa sakprosa (C)",
+      "andel": 13.6
+    },
+    {
+      "delprov": "Läsa berättande text (B)",
+      "andel": 11.8
+    },
+    {
+      "delprov": "Enskild högläsning (D)",
+      "andel": 9.2
+    },
+    {
+      "delprov": "Textsamtal (E)",
+      "andel": 7.4
+    }
+  ],
+  "npAk3MinstEtt": 18.3,
+  "npAk3Ar": 2025
+}
