@@ -43,14 +43,18 @@
   --series-magenta: #d53878; /* Rosa */
   --series-orange: #d24723;  /* ingen egen orange i profilen — återanvänder Röd */
 
-  /* Tomma stolar = frånvaro = rött, samma grammatik som diagrammen */
-  --seat-empty: var(--series-red);
-  --seat-occupied: var(--baseline);
-  --person: #56708a;
-  --giltig: var(--series-blue);
-  --ogiltig: var(--series-red);
-  --kon-flicka: var(--series-magenta);
-  --kon-pojke: var(--series-blue);
+  /* Läsrepets trådar (Scarborough 2001) — validerade mot dataviz-skillens
+     sex kontroller i bägge lägena. Språkförståelsen får fem distinkta kalla
+     kulörer, ordavkodningen en guldramp (position + etikett skiljer stegen).
+     Rött är reserverat för tappade trådar. */
+  --rope-sf-1: #0077bc; /* bakgrundskunskap */
+  --rope-sf-2: #008767; /* ordförråd */
+  --rope-sf-3: #674b99; /* språkstruktur */
+  --rope-sf-4: #008caa; /* verbalt resonemang */
+  --rope-sf-5: #d53878; /* textkunskap */
+  --rope-avk-1: #8a6800; /* fonologisk medvetenhet */
+  --rope-avk-2: #a77700; /* avkodning */
+  --rope-avk-3: #d19f00; /* ordbilder */
 
   --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
@@ -83,7 +87,15 @@
     --series-red: #d64b27;
     --series-magenta: #d73a7a;
     --series-orange: #d64b27;
-    --person: #9db3c6;
+
+    --rope-sf-1: #2186cd;
+    --rope-sf-2: #039773;
+    --rope-sf-3: #8a6ec0;
+    --rope-sf-4: #0090b1;
+    --rope-sf-5: #d73a7a;
+    --rope-avk-1: #8a6800;
+    --rope-avk-2: #a77700;
+    --rope-avk-3: #bd8a00;
   }
 }
 
