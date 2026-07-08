@@ -171,7 +171,9 @@ const overview = {
 const kohort = {
   beskrivning: "Årskullen som gick ut åk 9 våren 2025",
   checkpoints: [
-    { label: "Åk 3", ar: 2019, matt: "NP: missade minst ett läsdelprov", andel: pct(UNDER_AK3 * 100) },
+    // Jämförbart mått i alla tre punkter: läsförståelsedelprovet. (Villkorandet
+    // nedan använder det bredare "missade minst ett läsdelprov", 18,3 %.)
+    { label: "Åk 3", ar: 2019, matt: "NP: under kravnivån, läsförståelse", andel: 11.8 },
     { label: "Åk 6", ar: 2022, matt: "NP läsförståelse: provbetyg F", andel: pct(NP6_F * 100) },
     { label: "Åk 9", ar: 2025, matt: "NP läsförståelse: provbetyg F", andel: pct(NP9.F * 100) },
   ],
