@@ -57,13 +57,14 @@
   const trendSeries = $derived([
     {
       id: "prov",
-      label: "F på läsförståelsedelprovet (NP)",
+      label: "F på läsdelen (NP)",
       color: "var(--series-red)",
       serie: data.fTrend[kursplanVy].map((d) => ({ x: d.ar, y: d.provbetygF })),
     },
     {
       id: "amne",
-      label: "F i ämnesbetyg, båda kursplanerna",
+      // Vald kursplan står redan i titeln — bara helhetsvyn behöver förtydligas.
+      label: kursplanVy === "alla" ? "F i ämnesbetyg, båda kursplanerna" : "F i ämnesbetyg",
       color: "var(--series-blue)",
       serie: data.fTrend[kursplanVy].map((d) => ({ x: d.ar, y: d.amnesbetygF })),
     },
