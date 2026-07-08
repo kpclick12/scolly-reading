@@ -27,23 +27,23 @@
       "ak9": [
         {
           "betyg": "F",
-          "andel": 25.8
+          "andel": 27.1
         },
         {
           "betyg": "E",
-          "andel": 51.8
+          "andel": 53.8
         },
         {
           "betyg": "D",
-          "andel": 18
+          "andel": 15.7
         },
         {
           "betyg": "C",
-          "andel": 4.1
+          "andel": 3.4
         },
         {
           "betyg": "B",
-          "andel": 0.3
+          "andel": 0
         },
         {
           "betyg": "A",
@@ -57,23 +57,23 @@
       "ak9": [
         {
           "betyg": "F",
-          "andel": 1.1
+          "andel": 0.8
         },
         {
           "betyg": "E",
-          "andel": 15.8
+          "andel": 15.4
         },
         {
           "betyg": "D",
-          "andel": 27.7
+          "andel": 28.2
         },
         {
           "betyg": "C",
-          "andel": 29.7
+          "andel": 29.8
         },
         {
           "betyg": "B",
-          "andel": 17.3
+          "andel": 17.4
         },
         {
           "betyg": "A",
@@ -81,18 +81,18 @@
         }
       ]
     },
-    "fAndelUnder": 25.8,
-    "fAndelNadde": 1.1
+    "fAndelUnder": 27.1,
+    "fAndelNadde": 0.8
   },
   "fEfterAk6": [
     {
       "betygAk6": "F",
-      "andelFAk9": 73.5,
+      "andelFAk9": 78.8,
       "antal": 226
     },
     {
       "betygAk6": "E",
-      "andelFAk9": 12.6,
+      "andelFAk9": 11.8,
       "antal": 1242
     },
     {

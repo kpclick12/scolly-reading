@@ -49,7 +49,7 @@
     },
     {
       id: "amne",
-      label: "F i ämnesbetyg svenska",
+      label: "F i ämnesbetyg, båda kursplanerna",
       color: "var(--series-blue)",
       serie: data.fTrend.map((d) => ({ x: d.ar, y: d.amnesbetygF })),
     },
@@ -60,21 +60,33 @@
     {
       count: ov.obehorigaEndastSvenska,
       color: "#a7391d",
-      label: "saknar godkänt ENBART i svenska",
+      label: "saknar godkänt ENBART i svenskämnet",
     },
     {
       count: ov.obehorigaMedFSvenska - ov.obehorigaEndastSvenska,
       color: "#cc8370",
-      label: "saknar svenska + fler ämnen",
+      label: "saknar svenskämnet + fler ämnen",
     },
     {
       count: ov.obehoriga - ov.obehorigaMedFSvenska,
       color: "#9aa7b4",
-      label: "obehöriga av andra skäl (godkänt i svenska)",
+      label: "obehöriga av andra skäl (godkänt i svenskämnet)",
     },
   ]);
 
-  // Steg 3 — provbetyg × ämnesbetyg
+  // Steg 2 — två kursplaner, ett gap. Provet är gemensamt; kursplanen är
+  // elevens identitet i diagrammen: blå = svenska, aqua = sva. Rött används
+  // aldrig om GRUPPEN — bara om resultat.
+  const KURSPLAN_COLOR = { sv: "var(--series-blue)", sva: "var(--series-aqua)" };
+  const kp = $derived(data.kursplaner);
+  const gapBars = $derived([
+    { label: "Svenska — F på läsdelen (NP)", value: kp.np9F.sv, color: KURSPLAN_COLOR.sv },
+    { label: "Sva — F på läsdelen (NP)", value: kp.np9F.sva, color: KURSPLAN_COLOR.sva },
+    { label: "Svenska — F i ämnesbetyg", value: kp.amne9F.sv, color: KURSPLAN_COLOR.sv },
+    { label: "Sva — F i ämnesbetyg", value: kp.amne9F.sva, color: KURSPLAN_COLOR.sva },
+  ]);
+
+  // Steg 4 — provbetyg × ämnesbetyg
   const matrisRows = BETYG_ORDNING;
   const matrisCols = ["F", "E", "D", "C", "B", "A"];
   const matrisCells = $derived(
@@ -94,16 +106,18 @@
     },
   ]);
 
-  // Steg 12 — åk 9-betyg villkorat på åk 3-resultat
+  // Steg 14 — åk 9-betyg villkorat på åk 3-resultat, inom respektive kursplan
   const villkorade = $derived(data.kohort.villkorade);
   const villkoradeRows = $derived(
     [
-      { d: villkorade.underAk3, label: "Missade läsdelprov på NP i åk 3" },
-      { d: villkorade.naddeAk3, label: "Klarade läsdelproven i åk 3" },
-    ].map(({ d, label }) => ({
+      { label: "Missade i trean · svenska", antal: kp.villkorat.sv.antalUnder, ak9: kp.villkorat.sv.ak9Under },
+      { label: "Missade i trean · sva", antal: kp.villkorat.sva.antalUnder, ak9: kp.villkorat.sva.ak9Under },
+      { label: "Klarade trean · svenska", antal: kp.villkorat.sv.antalNadde, ak9: kp.villkorat.sv.ak9Nadde },
+      { label: "Klarade trean · sva", antal: kp.villkorat.sva.antalNadde, ak9: kp.villkorat.sva.ak9Nadde },
+    ].map(({ label, antal, ak9 }) => ({
       label,
-      sublabel: `${d.antal.toLocaleString("sv-SE")} elever`,
-      parts: [...d.ak9]
+      sublabel: `${antal.toLocaleString("sv-SE")} elever`,
+      parts: [...ak9]
         .sort((a, b) => BETYG_ORDNING.indexOf(b.betyg) - BETYG_ORDNING.indexOf(a.betyg))
         .map((p) => ({
           key: p.betyg,
@@ -118,18 +132,15 @@
     color: BETYG_COLOR[b],
   }));
 
-  // Steg 13 — F i nian efter betyget i sexan
+  // Steg 15 — F i nian efter betyget i sexan, inom respektive kursplan
   const fEfterAk6Bars = $derived(
-    data.kohort.fEfterAk6
-      .filter((d) => ["F", "E", "D", "C"].includes(d.betygAk6))
-      .map((d) => ({
-        label: d.betygAk6 === "F" ? "F i åk 6" : `${d.betygAk6} i åk 6`,
-        value: d.andelFAk9,
-        color: d.betygAk6 === "F" ? BETYG_COLOR.F : "var(--series-blue)",
-      }))
+    kp.fEfterAk6.flatMap((d) => [
+      { label: `${d.betygAk6} i åk 6 — svenska`, value: d.sv, color: KURSPLAN_COLOR.sv },
+      { label: `${d.betygAk6} i åk 6 — sva`, value: d.sva, color: KURSPLAN_COLOR.sva },
+    ])
   );
 
-  // Steg 14 — bedömningsstödet i åk 1
+  // Steg 16 — bedömningsstödet i åk 1
   const NIVA_COLOR = { lagre: "#a7391d", mellan: "#9cc0dd", hogre: "#0068b2" };
   const bedomningsRows = $derived(
     data.tidigaSignaler.bedomningsstod.map((d) => ({
@@ -200,12 +211,14 @@
     // ------------------------------------------------ Akt 1 · Läget ----
     { kicker: "Läget", headline: "Var sjunde tappar tråden redan i provet", typ: "data" },
     { kicker: "Trenden", headline: "Kurvorna pekar åt fel håll", typ: "data" },
+    { kicker: "Två kursplaner", headline: "Samma prov — ett gap på tre gånger", typ: "data" },
     { kicker: "Vad det kostar", headline: "1 004 elever utan behörighet", typ: "data" },
     { kicker: "Prov mot betyg", headline: "Provet och betyget berättar olika saker", typ: "data" },
     // ------------------------------------------- Akt 2 · Vetenskapen ----
     { kicker: "Vetenskapen", headline: "Läsning är ett rep av trådar" },
     { kicker: "Multiplikationen", headline: "Två faktorer. Är en noll, är allt noll." },
     { kicker: "Experimentet", headline: "Tappa en enda tråd" },
+    { kicker: "Två kursplaner", headline: "Samma rep — en annan bunt" },
     { kicker: "Forskningen", headline: "Beläggen är entydiga" },
     // ------------------------------- Akt 3 · Svårt — och nödvändigt ----
     { kicker: "Fjärde klass", headline: "Skiftet: från att lära sig läsa till att läsa för att lära" },
@@ -214,7 +227,7 @@
     // ---------------------------------------------- Akt 4 · Kohorten ----
     { kicker: "Kohorten 2019–2025", headline: "Vi följde en hel årskull", typ: "data" },
     { kicker: "Kohorten 2019–2025", headline: "Trådarna som tappades i trean blev betygen i nian", typ: "data" },
-    { kicker: "Kohorten 2019–2025", headline: "Efter sexan är det brant uppför", typ: "data" },
+    { kicker: "Kohorten 2019–2025", headline: "Efter sexan är det brant uppför — i båda kursplanerna", typ: "data" },
     // ---------------------------------------- Akt 5 · Tidiga signaler ----
     { kicker: "Tidiga signaler", headline: "Signalen syns redan första hösten i ettan", typ: "data" },
     { kicker: "Tidiga signaler", headline: "Trean pekar ut vilken tråd som brister", typ: "data" },
@@ -223,15 +236,17 @@
   ];
 
   const ropeMode = $derived(
-    currentStep === 4
+    currentStep === 5
       ? "strands"
-      : currentStep === 6
+      : currentStep === 7
         ? "missing"
         : currentStep === 8
-          ? "shift"
-          : currentStep === 16
-            ? "all"
-            : null
+          ? "thin"
+          : currentStep === 10
+            ? "shift"
+            : currentStep === 18
+              ? "all"
+              : null
   );
 
   const dec = (x) => String(x).replace(".", ",");
@@ -258,15 +273,21 @@
           {:else if currentStep === 1}
             <LineChart
               series={trendSeries}
-              title="Andel elever med F i läsning/svenska åk 9, 2015–2025"
+              title="Andel elever med F i läsning/svenskämnena åk 9, 2015–2025"
               note="Nationella proven ställdes in 2020–2021 (pandemin)."
             />
           {:else if currentStep === 2}
+            <BarChart
+              data={gapBars}
+              title="Andel F på det gemensamma nationella provets läsdel respektive i ämnesbetyget, per kursplan, åk 9 våren 2025"
+              maxValue={40}
+            />
+          {:else if currentStep === 3}
             <DotWaffle
               groups={waffleGroups}
               caption="Varje prick är en elev som våren 2025 lämnade åk 9 utan behörighet till gymnasiets yrkesprogram."
             />
-          {:else if currentStep === 3}
+          {:else if currentStep === 4}
             <Heatmap
               rows={matrisRows}
               cols={matrisCols}
@@ -279,11 +300,11 @@
               showValues={true}
               highlight={["F__E", "F__D"]}
             />
-          {:else if currentStep === 5}
+          {:else if currentStep === 6}
             <SimpleView />
-          {:else if currentStep === 7}
-            <ResearchCards cards={forskningskort} />
           {:else if currentStep === 9}
+            <ResearchCards cards={forskningskort} />
+          {:else if currentStep === 11}
             <LineChart
               series={bokSerie}
               unit="%"
@@ -291,34 +312,34 @@
               title="Andel 9–12-åringar som läser böcker en vanlig dag (Statens medieråd)"
               note="Verklig statistik: Ungar & medier 2012–2023, avrundade värden."
             />
-          {:else if currentStep === 10}
+          {:else if currentStep === 12}
             <LasValjare />
-          {:else if currentStep === 11}
+          {:else if currentStep === 13}
             <LineChart
               series={kohortSeries}
               unit="%"
               labelAll={true}
               title="Samma årskull vid tre kontrollstationer: andel under kravnivån/med F på nationella provets läsdel"
             />
-          {:else if currentStep === 12}
+          {:else if currentStep === 14}
             <StackedBars
               rows={villkoradeRows}
               legend={betygLegend}
-              title="Ämnesbetyg i svenska åk 9 (våren 2025), efter resultat på nationella provets läsdelprov i åk 3 (2019)"
+              title="Ämnesbetyg åk 9 (våren 2025) efter resultat på nationella provets läsdelprov i åk 3 (2019), inom respektive kursplan"
             />
-          {:else if currentStep === 13}
+          {:else if currentStep === 15}
             <BarChart
               data={fEfterAk6Bars}
-              title="Andel som fick F i svenska åk 9, efter ämnesbetyg i åk 6 — samma årskull"
+              title="Andel som fick F i åk 9, efter ämnesbetyg i åk 6 — samma årskull, per kursplan"
               maxValue={100}
             />
-          {:else if currentStep === 14}
+          {:else if currentStep === 16}
             <StackedBars
               rows={bedomningsRows}
               legend={bedomningsLegend}
               title="Bedömningsstödet i läs- och skrivutveckling, hösten åk 1 — andel elever per nivå"
             />
-          {:else if currentStep === 15}
+          {:else if currentStep === 17}
             <BarChart
               data={delprovBars}
               title="Nationella provet i svenska åk 3 (våren 2025): andel som inte nådde kravnivån, per läsdelprov"
@@ -339,8 +360,9 @@
       <h2>{step.headline}</h2>
       {#if i === 0}
         <p>
-          I våras skrev {ov.arskull.toLocaleString("sv-SE")} niondeklassare det
-          nationella provet i svenska. På läsförståelsedelen fick
+          I våras skrev {ov.arskull.toLocaleString("sv-SE")} niondeklassare
+          det gemensamma nationella provet i svenska och svenska som
+          andraspråk. På läsförståelsedelen fick
           <strong>{dec(ov.npAndelAE)}&nbsp;%</strong> godkänt. Resten —
           <strong>var sjunde elev</strong> — klarade inte att läsa och förstå
           de texter provet ställer mot dem, efter nio år i skolan.
@@ -364,6 +386,26 @@
         </p>
       {:else if i === 2}
         <p>
+          Innan vi går vidare måste bilden delas i två. Svenskämnet finns i
+          <strong>två kursplaner</strong> — svenska och svenska som
+          andraspråk — men <strong>nationella provet är gemensamt</strong>:
+          samma texter, samma frågor, samma dag. Det gör gapet mätbart rent.
+        </p>
+        <p>
+          På läsdelen fick <strong>{dec(kp.np9F.sv)}&nbsp;%</strong> av
+          eleverna som läser svenska ett F — mot
+          <strong>{dec(kp.np9F.sva)}&nbsp;%</strong> av dem som läser svenska
+          som andraspråk. Var {kp.andelSva >= 12.5 ? "sjunde" : "åttonde"}
+          elev i årskullen läser sva.
+        </p>
+        <div class="callout">
+          <span class="callout-num">{dec(Math.round((kp.np9F.sva / kp.np9F.sv) * 10) / 10)}&nbsp;×</span>
+          <span class="callout-label">högre andel F på samma prov. Håll kvar
+            frågan <em>varför</em> — vetenskapsakten pekar ut exakt vilka
+            trådar gapet sitter i, och varför de går att tvinna.</span>
+        </div>
+      {:else if i === 3}
+        <p>
           Vad kostar kurvorna i människor? Behörighet till gymnasiets
           yrkesprogram kräver godkänt i svenska, engelska, matematik och fem
           ämnen till. I våras saknade
@@ -372,7 +414,7 @@
         </p>
         <p>
           <strong>{ov.obehorigaMedFSvenska}</strong> av dem saknar godkänt i
-          just svenska — och för en grupp var svenskan det enda som fattades:
+          sitt svenskämne — svenska eller sva — och för en grupp var svenskan det enda som fattades:
           godkänt i allt annat, men dörren till gymnasiet stängd av ett enda
           ämne. Av alla ämnen är det just läsningen som stänger flest andra
           dörrar på vägen: den som inte kan läsa läroboken förlorar även SO:n,
@@ -382,10 +424,11 @@
           <span class="callout-num">{ov.obehorigaEndastSvenska}</span>
           <span class="callout-label">elever föll på svenskan ensam</span>
         </div>
-      {:else if i === 3}
+      {:else if i === 4}
         <p>
           Minns gapet mellan kurvorna? Här är det, elev för elev. Rutnätet visar
-          varje kombination av provbetyg på läsdelen och slutbetyg i svenska.
+          varje kombination av provbetyg på läsdelen och slutbetyg i respektive
+          kursplan.
           De flesta ligger på diagonalen — provet och betyget säger samma sak.
         </p>
         <p>
@@ -397,7 +440,7 @@
           att slutbetyget kan dölja just läsluckor som provet hittade. E:t på
           pappret tvinnar inte om tråden.
         </p>
-      {:else if i === 4}
+      {:else if i === 5}
         <p>
           För att förstå varför luckorna biter sig fast måste man se läsningen
           som forskningen ser den. Det här är <strong>Scarboroughs
@@ -414,7 +457,7 @@
           <em>strategisk</em>. God läsning är båda buntarna, tvinnade — hela
           vägen fram.
         </p>
-      {:else if i === 5}
+      {:else if i === 6}
         <p>
           Redan innan repet ritades fanns insikten som en formel.
           <em>The Simple View of Reading</em>: Läsning = Avkodning ×
@@ -429,7 +472,7 @@
           på det eleven är bra på" aldrig fungerar i läsning: det är den svaga
           faktorn som sätter produkten.
         </p>
-      {:else if i === 6}
+      {:else if i === 7}
         <p>
           Så vad händer när en enda tråd aldrig blir tvinnad? Här är eleven
           där <strong>avkodningen</strong> inte automatiserades i ettan och
@@ -443,7 +486,23 @@
           ointresse: eleven undviker text, bläddrar, stör. Det som egentligen
           brister är en träningsbar färdighet från lågstadiet.
         </p>
-      {:else if i === 7}
+      {:else if i === 8}
+        <p>
+          Minns gapet mellan kursplanerna? Här är dess anatomi. För många
+          sva-elever är <strong>avkodningsbunten intakt</strong> — de läser
+          flytande, ibland på två språk. Det som är tunt är
+          <strong>förståelsebunten på svenska</strong>: orden, uttrycken,
+          bakgrundskunskaperna som svenska texter tyst förutsätter.
+        </p>
+        <p>
+          Men multiplikationen är obeveklig: flytande avkodning × tunt
+          ordförråd = läsning som inte bär i SO-boken. Skillnaden mot den
+          tappade tråden är avgörande — <strong>tunna trådar är hela
+          trådar</strong>. De tvinnas tjockare av det som alltid bygger
+          språk: mängder av text, samtal och kunskapsundervisning på svenska.
+          Det är samma rep. Bara en annan tråd att tvinna.
+        </p>
+      {:else if i === 9}
         <p>
           Det här är inte en metafor vi valt för att den är vacker — repet och
           multiplikationen är bland de mest belagda modellerna i
@@ -455,7 +514,7 @@
           tidigt, den svagaste tråden sätter taket, och gap som lämnas ifred
           växer av sig själva.
         </p>
-      {:else if i === 8}
+      {:else if i === 10}
         <p>
           Repet förklarar också varför problemen ofta blir synliga först i
           <strong>fjärde klass</strong>. Till och med trean handlar skolan om
@@ -470,7 +529,7 @@
           NO-labbens instruktion, mattens lästal. Den som tappar tråden i
           fyran tappar den överallt samtidigt.
         </p>
-      {:else if i === 9}
+      {:else if i === 11}
         <p>
           Samtidigt har läsningens <strong>vardagsträning</strong> tunnats ut.
           Att bli läsare kräver mängd — tusentals möten med ord — och en
@@ -486,7 +545,7 @@
           Ordförrådet och uthålligheten som långtexter bygger måste numera
           klassrummet stå för nästan ensamt.
         </p>
-      {:else if i === 10}
+      {:else if i === 12}
         <p>
           Fyll i vad som helst — svaret blir detsamma. En femtonåring som
           väljer bort läsningen fattar ett beslut om en framtid hen ännu inte
@@ -501,7 +560,7 @@
           <strong>det inte finns något läsfritt yrke</strong>, och att
           vuxenlivets viktigaste papper är skrivna för den som kan läsa dem.
         </p>
-      {:else if i === 11}
+      {:else if i === 13}
         <p>
           Om repet stämmer borde trådarna synas i vår egen data — långt innan
           betygen sätts. Så vi följde <strong>årskullen som gick ut nian i
@@ -517,7 +576,7 @@
           med tunna trådar. Sedan tätnar texterna, och gapet öppnar sig igen.
           Svackan i kurvan är ingen svacka i verkligheten.
         </p>
-      {:else if i === 12}
+      {:else if i === 14}
         <p>
           Det starkaste beviset är att följa <strong>samma barn</strong>. Dela
           årskullen i två grupper efter ett enda mått: klarade de läsdelproven
@@ -526,32 +585,39 @@
         <div class="callout">
           <span class="callout-num">{Math.round(villkorade.fAndelUnder)}&nbsp;%</span>
           <span class="callout-label">av dem som missade läsdelproven i trean
-            fick F i svenska i nian — mot
+            fick F i nian — mot
             <strong>{Math.round(villkorade.fAndelNadde)}&nbsp;%</strong> av dem som klarade dem</span>
         </div>
         <p>
+          Och lägg märke till att <strong>mönstret håller inom båda
+          kursplanerna</strong> — {dec(kp.villkorat.sv.fAndelUnder)}&nbsp;%
+          inom svenska, {dec(kp.villkorat.sva.fAndelUnder)}&nbsp;% inom sva,
+          mot runt en–två procent för alla som klarade trean. Det här är
+          alltså inte ett annat sätt att stava "nyanländ".
           <strong>Ett läsprov i årskurs tre förutsäger slutbetyget nästan ett
-          decennium i förväg.</strong> Trådarna tvinnade inte om sig själva.
-          De växte in i betygskatalogen.
+          decennium i förväg</strong> — oavsett kursplan. Trådarna tvinnade
+          inte om sig själva. De växte in i betygskatalogen.
         </p>
-      {:else if i === 13}
+      {:else if i === 15}
         <p>
-          Och ju senare en tråd ska tvinnas om, desto tyngre blir jobbet. Även
-          av dem som precis klarade sexan med ett E föll mer än var åttonde
-          till F i nian.
+          Och ju senare en tråd ska tvinnas om, desto tyngre blir jobbet — i
+          <strong>båda kursplanerna</strong>. Av dem som precis klarade sexan
+          med ett E föll var tionde inom svenska och var sjätte inom sva till
+          F i nian.
         </p>
         <div class="callout">
           <span class="callout-num">3&nbsp;av&nbsp;4</span>
-          <span class="callout-label">med F i sexan fick F även i nian
-            ({dec(data.kohort.fEfterAk6.find((d) => d.betygAk6 === "F").andelFAk9)}&nbsp;%)</span>
+          <span class="callout-label">med F i sexan fick F även i nian —
+            {dec(kp.fEfterAk6[0].sv)}&nbsp;% inom svenska,
+            {dec(kp.fEfterAk6[0].sva)}&nbsp;% inom sva</span>
         </div>
         <p>
           Högstadiet reparerar alltså sällan mellanstadiets läsning — det
-          kräver den, i högre tempo och med tätare texter. Ska tråden tvinnas
-          om behöver det ske tidigare, medan texterna ännu är korta och repet
-          bär lite.
+          kräver den, i högre tempo och med tätare texter, oavsett vilken
+          kursplan eleven läser. Ska tråden tvinnas om behöver det ske
+          tidigare, medan texterna ännu är korta och repet bär lite.
         </p>
-      {:else if i === 14}
+      {:else if i === 16}
         <p>
           Hur tidigt kan skolan se det? Redan <strong>första höstterminen i
           årskurs 1</strong>. Skolverkets obligatoriska bedömningsstöd i läs-
@@ -562,9 +628,12 @@
         <p>
           Två saker i bilden förtjänar oro: gruppen på lägre nivå
           <strong>växer för varje år</strong> — och det som mäts är exakt de
-          trådar som resten av repet ska tvinnas runt.
+          trådar som resten av repet ska tvinnas runt. Bedömningsstödet finns
+          för båda kursplanerna, och det är här skolan kan skilja signalen
+          <em>"kan inte avkoda"</em> från <em>"kan inte svenska än"</em> —
+          två olika trådar, två olika insatser.
         </p>
-      {:else if i === 15}
+      {:else if i === 17}
         <p>
           Nationella provet i trean visar inte bara <em>vilka</em> elever som
           behöver hjälp — det visar <em>vilken tråd</em> det gäller. I våras
@@ -579,7 +648,7 @@
           provresultat — det är en karta över vilken tråd som ska tvinnas, för
           vilket barn. Sex år innan betyget sätts.
         </p>
-      {:else if i === 16}
+      {:else if i === 18}
         <p>
           Det här är den ljusa punkten: <strong>Matteuseffekten går att
           vända</strong>, och ingen del av skolan har starkare verktyg än

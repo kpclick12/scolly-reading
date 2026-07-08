@@ -39,13 +39,23 @@ const pct = (x, d = 1) => Math.round(x * 10 ** d) / 10 ** d;
 // vt 2022 → NP + slutbetyg åk 9 vt 2025.
 const N = 5804;
 
+// Två kursplaner: svenska och svenska som andraspråk. Nationella provet är
+// gemensamt — det är därför gapet går att mäta rent. Sva-elevernas
+// SVENSK-läsning ligger lägre i snitt (förståelsetrådarna — ordförråd,
+// bakgrundskunskap — är tunnare på svenska), modellerat som ett skift i den
+// latenta förmågan. Skiftet är kalibrerat så att gruppandelarna dekomponerar
+// totalerna: ~9–10 % F på läsdelen i svenska mot ~35–40 % i sva.
+const SVA_ANDEL = 0.14;
+const SVA_SKIFT = 1.05;
+
 const students = Array.from({ length: N }, () => {
-  const theta3 = randn(); // "läsförmåga" i åk 3
+  const sva = rand() < SVA_ANDEL;
+  const theta3 = randn() - (sva ? SVA_SKIFT : 0); // "läsförmåga på svenska" i åk 3
   // Matteus-effekt (Stanovich 1986 — termen kommer från läsforskningen):
   // gapet växer — den som ligger lågt driver nedåt.
   const theta6 = 1.18 * theta3 + 0.55 * randn();
   const theta9 = 1.18 * theta6 + 0.55 * randn();
-  return { theta3, theta6, theta9 };
+  return { sva, theta3, theta6, theta9 };
 });
 
 // Rangbaserade trösklar ger exakta marginaler (andelar) med bibehållen
@@ -155,6 +165,51 @@ const fEfterAk6 = BETYG.map((b) => {
   return { betygAk6: b, andelFAk9: grupp.length ? share(grupp, (s) => s.amne9 === "F") : 0, antal: grupp.length };
 });
 
+// -------------------------------------------- två kursplaner, ett gap ----
+const svGrupp = students.filter((s) => !s.sva);
+const svaGrupp = students.filter((s) => s.sva);
+const perKursplan = (pred) => ({
+  sv: share(svGrupp, pred),
+  sva: share(svaGrupp, pred),
+});
+
+const kursplaner = {
+  antal: { sv: svGrupp.length, sva: svaGrupp.length },
+  andelSva: pct((svaGrupp.length / N) * 100),
+  np9F: perKursplan((s) => s.np9 === "F"),
+  amne9F: perKursplan((s) => s.amne9 === "F"),
+  antalF: {
+    sv: svGrupp.filter((s) => s.amne9 === "F").length,
+    sva: svaGrupp.filter((s) => s.amne9 === "F").length,
+  },
+  // Kohortens villkorade utfall inom respektive kursplan — mönstret
+  // "missade trean → F i nian" ska hålla i BÅDA grupperna.
+  villkorat: {
+    sv: {
+      fAndelUnder: share(svGrupp.filter((s) => s.ak3 === "under"), (s) => s.amne9 === "F"),
+      fAndelNadde: share(svGrupp.filter((s) => s.ak3 === "nadde"), (s) => s.amne9 === "F"),
+      antalUnder: svGrupp.filter((s) => s.ak3 === "under").length,
+      antalNadde: svGrupp.filter((s) => s.ak3 === "nadde").length,
+      ak9Under: fordelning(svGrupp.filter((s) => s.ak3 === "under"), "amne9"),
+      ak9Nadde: fordelning(svGrupp.filter((s) => s.ak3 === "nadde"), "amne9"),
+    },
+    sva: {
+      fAndelUnder: share(svaGrupp.filter((s) => s.ak3 === "under"), (s) => s.amne9 === "F"),
+      fAndelNadde: share(svaGrupp.filter((s) => s.ak3 === "nadde"), (s) => s.amne9 === "F"),
+      antalUnder: svaGrupp.filter((s) => s.ak3 === "under").length,
+      antalNadde: svaGrupp.filter((s) => s.ak3 === "nadde").length,
+      ak9Under: fordelning(svaGrupp.filter((s) => s.ak3 === "under"), "amne9"),
+      ak9Nadde: fordelning(svaGrupp.filter((s) => s.ak3 === "nadde"), "amne9"),
+    },
+  },
+  // "Efter sexan är det brant uppför" — inom respektive kursplan (F och E i åk 6).
+  fEfterAk6: ["F", "E"].map((b) => ({
+    betygAk6: b,
+    sv: share(svGrupp.filter((s) => s.amne6 === b), (s) => s.amne9 === "F"),
+    sva: share(svaGrupp.filter((s) => s.amne6 === b), (s) => s.amne9 === "F"),
+  })),
+};
+
 const overview = {
   lasar: "2024/25",
   arskull: N,
@@ -233,6 +288,7 @@ const files = {
   "betygMatris.json": matris,
   "kohort.json": kohort,
   "tidigaSignaler.json": tidigaSignaler,
+  "kursplaner.json": kursplaner,
 };
 for (const [name, data] of Object.entries(files)) {
   writeFileSync(join(OUT, name), JSON.stringify(data, null, 2) + "\n");
@@ -247,3 +303,11 @@ console.log("F i åk 9 om missade läsdelprov åk 3:", kohort.villkorade.fAndelU
   "| om klarade:", kohort.villkorade.fAndelNadde + "%");
 console.log("F åk 9 efter betyg åk 6:", fEfterAk6.map((d) => `${d.betygAk6}:${d.andelFAk9}%`).join(" "));
 console.log("Andel av NP-F som fick E+ i ämnesbetyg:", npFHojda + "%");
+console.log("--- två kursplaner ---");
+console.log("Sva-andel:", kursplaner.andelSva + "%", `(${kursplaner.antal.sva} elever)`);
+console.log("NP-läsdelen F — sv:", kursplaner.np9F.sv + "%", "| sva:", kursplaner.np9F.sva + "%");
+console.log("Ämnesbetyg F — sv:", kursplaner.amne9F.sv + "%", "| sva:", kursplaner.amne9F.sva + "%");
+console.log("Missade trean → F i nian — sv:", kursplaner.villkorat.sv.fAndelUnder + "%",
+  "(klarade:", kursplaner.villkorat.sv.fAndelNadde + "%) | sva:", kursplaner.villkorat.sva.fAndelUnder + "%",
+  "(klarade:", kursplaner.villkorat.sva.fAndelNadde + "%)");
+console.log("F/E i sexan → F i nian:", kursplaner.fEfterAk6.map((d) => `${d.betygAk6}: sv ${d.sv}% sva ${d.sva}%`).join(" | "));

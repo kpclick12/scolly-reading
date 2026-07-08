@@ -34,8 +34,9 @@
     }));
   })();
 
-  // mT = missing-läget (0→1), sT = shift-läget (0→1).
-  function samples(meta, mT, sT) {
+  // mT = missing (0→1), sT = shift (0→1), tT = thin (0→1) — tunn
+  // förståelsebunt: sva-profilen, hela trådar men smala.
+  function samples(meta, mT, sT, tT) {
     const missing = meta.id === MISSING_STRAND;
     const pts = [];
     for (let k = 0; k <= N; k++) {
@@ -51,6 +52,7 @@
       const u = ss((x - 60) / 500);
       const wShift = meta.bundle === "avk" ? lerp(9.5, 3, u) : lerp(3.5, 9, u);
       let w = BASE_W + sT * (wShift - BASE_W);
+      if (meta.bundle === "sf") w *= 1 - 0.55 * tT;
 
       if (missing && mT > 0) {
         const drop = x <= XB ? 0 : ((x - XB) / (X1 - XB)) ** 2;
@@ -83,20 +85,22 @@
   import { tweened } from "svelte/motion";
   import { cubicInOut } from "svelte/easing";
 
-  // mode: "all" | "strands" | "missing" | "shift" | "explore"
+  // mode: "all" | "strands" | "missing" | "shift" | "thin" | "explore"
   // I explore-läget är trådarna klickbara; vald tråd lyser, resten tonas.
   let { mode = "all", title = "", selected = null, onSelect = null } = $props();
 
   const mT = tweened(0, { duration: 800, easing: cubicInOut });
   const sT = tweened(0, { duration: 800, easing: cubicInOut });
+  const tT = tweened(0, { duration: 800, easing: cubicInOut });
   $effect(() => {
     mT.set(mode === "missing" ? 1 : 0);
     sT.set(mode === "shift" ? 1 : 0);
+    tT.set(mode === "thin" ? 1 : 0);
   });
 
   const geom = $derived(
     strandMeta.map((meta) => {
-      const pts = samples(meta, $mT, $sT);
+      const pts = samples(meta, $mT, $sT, $tT);
       return { meta, d: ribbonPath(pts), hit: centerPath(pts) };
     })
   );
@@ -105,7 +109,9 @@
   const isDimmed = (id) =>
     mode === "explore" && selected != null && id !== selected;
 
-  const showStrandLabels = $derived(mode === "strands" || mode === "explore");
+  const showStrandLabels = $derived(
+    mode === "strands" || mode === "explore" || mode === "thin"
+  );
 </script>
 
 <figure class="rope">
@@ -179,6 +185,10 @@
   {:else if mode === "shift"}
     <div class="legend">
       <span class="legend-note">Trådens tjocklek = hur mycket den bär i läsningen just den årskursen.</span>
+    </div>
+  {:else if mode === "thin"}
+    <div class="legend">
+      <span class="legend-note">Tunna trådar är hela trådar — de går att tvinna tjockare. Inget här är brustet.</span>
     </div>
   {:else}
     <div class="legend">

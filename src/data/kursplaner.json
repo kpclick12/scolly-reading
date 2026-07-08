@@ -1,0 +1,149 @@
+{
+  "antal": {
+    "sv": 5048,
+    "sva": 756
+  },
+  "andelSva": 13,
+  "np9F": {
+    "sv": 10.4,
+    "sva": 34.5
+  },
+  "amne9F": {
+    "sv": 3.7,
+    "sva": 18.4
+  },
+  "antalF": {
+    "sv": 186,
+    "sva": 139
+  },
+  "villkorat": {
+    "sv": {
+      "fAndelUnder": 22.1,
+      "fAndelNadde": 0.7,
+      "antalUnder": 712,
+      "antalNadde": 4336,
+      "ak9Under": [
+        {
+          "betyg": "F",
+          "andel": 22.1
+        },
+        {
+          "betyg": "E",
+          "andel": 54.8
+        },
+        {
+          "betyg": "D",
+          "andel": 18.7
+        },
+        {
+          "betyg": "C",
+          "andel": 4.5
+        },
+        {
+          "betyg": "B",
+          "andel": 0
+        },
+        {
+          "betyg": "A",
+          "andel": 0
+        }
+      ],
+      "ak9Nadde": [
+        {
+          "betyg": "F",
+          "andel": 0.7
+        },
+        {
+          "betyg": "E",
+          "andel": 14.2
+        },
+        {
+          "betyg": "D",
+          "andel": 27.6
+        },
+        {
+          "betyg": "C",
+          "andel": 30.3
+        },
+        {
+          "betyg": "B",
+          "andel": 18.3
+        },
+        {
+          "betyg": "A",
+          "andel": 9
+        }
+      ]
+    },
+    "sva": {
+      "fAndelUnder": 37.4,
+      "fAndelNadde": 2,
+      "antalUnder": 350,
+      "antalNadde": 406,
+      "ak9Under": [
+        {
+          "betyg": "F",
+          "andel": 37.4
+        },
+        {
+          "betyg": "E",
+          "andel": 51.7
+        },
+        {
+          "betyg": "D",
+          "andel": 9.7
+        },
+        {
+          "betyg": "C",
+          "andel": 1.1
+        },
+        {
+          "betyg": "B",
+          "andel": 0
+        },
+        {
+          "betyg": "A",
+          "andel": 0
+        }
+      ],
+      "ak9Nadde": [
+        {
+          "betyg": "F",
+          "andel": 2
+        },
+        {
+          "betyg": "E",
+          "andel": 28.1
+        },
+        {
+          "betyg": "D",
+          "andel": 34.7
+        },
+        {
+          "betyg": "C",
+          "andel": 25.1
+        },
+        {
+          "betyg": "B",
+          "andel": 8.1
+        },
+        {
+          "betyg": "A",
+          "andel": 2
+        }
+      ]
+    }
+  },
+  "fEfterAk6": [
+    {
+      "betygAk6": "F",
+      "sv": 77.5,
+      "sva": 80
+    },
+    {
+      "betygAk6": "E",
+      "sv": 10.5,
+      "sva": 15.6
+    }
+  ]
+}

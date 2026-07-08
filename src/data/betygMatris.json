@@ -2,7 +2,7 @@
   {
     "provbetyg": "F",
     "amnesbetyg": "F",
-    "andel": 5.5
+    "andel": 5.6
   },
   {
     "provbetyg": "F",
@@ -32,59 +32,59 @@
   {
     "provbetyg": "E",
     "amnesbetyg": "F",
+    "andel": 0
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "E",
+    "andel": 13.8
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "D",
+    "andel": 9.7
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "C",
+    "andel": 0.2
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "B",
+    "andel": 0
+  },
+  {
+    "provbetyg": "E",
+    "amnesbetyg": "A",
+    "andel": 0
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "F",
+    "andel": 0
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "E",
+    "andel": 0.7
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "D",
+    "andel": 14.5
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "C",
+    "andel": 9.3
+  },
+  {
+    "provbetyg": "D",
+    "amnesbetyg": "B",
     "andel": 0.1
   },
   {
-    "provbetyg": "E",
-    "amnesbetyg": "E",
-    "andel": 13.4
-  },
-  {
-    "provbetyg": "E",
-    "amnesbetyg": "D",
-    "andel": 10
-  },
-  {
-    "provbetyg": "E",
-    "amnesbetyg": "C",
-    "andel": 0.4
-  },
-  {
-    "provbetyg": "E",
-    "amnesbetyg": "B",
-    "andel": 0
-  },
-  {
-    "provbetyg": "E",
-    "amnesbetyg": "A",
-    "andel": 0
-  },
-  {
-    "provbetyg": "D",
-    "amnesbetyg": "F",
-    "andel": 0
-  },
-  {
-    "provbetyg": "D",
-    "amnesbetyg": "E",
-    "andel": 1.2
-  },
-  {
-    "provbetyg": "D",
-    "amnesbetyg": "D",
-    "andel": 14.1
-  },
-  {
-    "provbetyg": "D",
-    "amnesbetyg": "C",
-    "andel": 9
-  },
-  {
-    "provbetyg": "D",
-    "amnesbetyg": "B",
-    "andel": 0.3
-  },
-  {
     "provbetyg": "D",
     "amnesbetyg": "A",
     "andel": 0
@@ -102,22 +102,22 @@
   {
     "provbetyg": "C",
     "amnesbetyg": "D",
-    "andel": 1.7
+    "andel": 1.6
   },
   {
     "provbetyg": "C",
     "amnesbetyg": "C",
-    "andel": 14.1
+    "andel": 14
   },
   {
     "provbetyg": "C",
     "amnesbetyg": "B",
-    "andel": 5.2
+    "andel": 5.5
   },
   {
     "provbetyg": "C",
     "amnesbetyg": "A",
-    "andel": 0.2
+    "andel": 0.1
   },
   {
     "provbetyg": "B",
@@ -172,11 +172,11 @@
   {
     "provbetyg": "A",
     "amnesbetyg": "B",
-    "andel": 1
+    "andel": 0.9
   },
   {
     "provbetyg": "A",
     "amnesbetyg": "A",
-    "andel": 4.5
+    "andel": 4.6
   }
 ]

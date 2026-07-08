@@ -1,32 +1,32 @@
 [
   {
     "ar": 2015,
-    "amnesbetygF": 3.2,
-    "provbetygF": 9.6
-  },
-  {
-    "ar": 2016,
     "amnesbetygF": 3.4,
     "provbetygF": 10
   },
   {
-    "ar": 2017,
+    "ar": 2016,
     "amnesbetygF": 3.6,
-    "provbetygF": 10.3
+    "provbetygF": 10.2
+  },
+  {
+    "ar": 2017,
+    "amnesbetygF": 3.7,
+    "provbetygF": 10.4
   },
   {
     "ar": 2018,
-    "amnesbetygF": 3.7,
+    "amnesbetygF": 4,
     "provbetygF": 10.5
   },
   {
     "ar": 2019,
-    "amnesbetygF": 4.1,
-    "provbetygF": 11.2
+    "amnesbetygF": 4.2,
+    "provbetygF": 11
   },
   {
     "ar": 2020,
-    "amnesbetygF": 4.2,
+    "amnesbetygF": 4.4,
     "provbetygF": null
   },
   {
@@ -37,17 +37,17 @@
   {
     "ar": 2022,
     "amnesbetygF": 4.7,
-    "provbetygF": 12.3
+    "provbetygF": 12.1
   },
   {
     "ar": 2023,
-    "amnesbetygF": 5,
-    "provbetygF": 12.5
+    "amnesbetygF": 4.9,
+    "provbetygF": 12.6
   },
   {
     "ar": 2024,
-    "amnesbetygF": 5.1,
-    "provbetygF": 13.1
+    "amnesbetygF": 5.5,
+    "provbetygF": 12.9
   },
   {
     "ar": 2025,

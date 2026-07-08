@@ -43,11 +43,11 @@
   const statRow = [
     {
       value: `${dec(ov.npAndelAE)} %`,
-      label: "av niorna klarade läsförståelsedelen av nationella provet i svenska, våren 2025",
+      label: "av niorna klarade läsförståelsedelen av det gemensamma nationella provet, våren 2025",
     },
     {
       value: fmt(ov.antalF),
-      label: "elever lämnade nian med F i svenska",
+      label: "elever lämnade nian med F i svenska eller svenska som andraspråk",
     },
     {
       value: fmt(ov.obehoriga),
@@ -55,7 +55,7 @@
     },
     {
       value: fmt(ov.obehorigaEndastSvenska),
-      label: "av dem föll på ett enda ämne: svenskan",
+      label: "av dem föll på ett enda ämne: svenskämnet",
       accent: true,
     },
   ];
@@ -89,8 +89,8 @@
       <span class="hero-line2">tråd</span>
     </h1>
     <p class="subtitle">
-      Var sjunde elev i nian klarade inte läsdelen av nationella provet i
-      svenska i våras, och {fmt(ov.obehoriga)} lämnade grundskolan utan
+      Var sjunde elev i nian klarade inte läsdelen av det gemensamma
+      nationella provet i svenska och svenska som andraspråk i våras, och {fmt(ov.obehoriga)} lämnade grundskolan utan
       behörighet till gymnasiet. Läsning är ett rep av trådar — avkodning och
       språkförståelse tvinnade om varandra — och det brister där tråden är
       tunnast. Det här är berättelsen om var trådarna tappas, hur tidigt det
@@ -162,7 +162,7 @@
     <p class="epilog-kicker">Ett enda ämne</p>
     <h2>
       {fmt(ov.obehorigaEndastSvenska)} elever var godkända i allt — utom
-      svenska.
+      sitt svenskämne.
     </h2>
     <p class="epilog-text">
       För dem stängdes gymnasiedörren av ett enda ämne. Tråden syntes redan i
@@ -190,6 +190,13 @@
         och åk 9 (nationella provets delprov B, läsförståelse), nationella
         provets läsdelprov i åk 3 samt Skolverkets obligatoriska
         bedömningsstöd i läs- och skrivutveckling i åk 1.
+      </li>
+      <li>
+        Svenskämnet finns i <strong>två kursplaner</strong> — svenska och
+        svenska som andraspråk. Nationella provet är gemensamt för båda;
+        ämnesbetygen sätts mot respektive kursplan. Sidans totaler avser
+        båda kursplanerna sammantaget om inget annat anges, och i den
+        simulerade årskullen läser 13&nbsp;% av eleverna sva.
       </li>
       <li>
         Läsrepet är en svensk tolkning av Scarborough (2001), "Connecting

@@ -6,6 +6,7 @@ import npFordelning from "../../data/npFordelning.json";
 import betygMatris from "../../data/betygMatris.json";
 import kohort from "../../data/kohort.json";
 import tidigaSignaler from "../../data/tidigaSignaler.json";
+import kursplaner from "../../data/kursplaner.json";
 
 export const appData = {
   overview,
@@ -14,4 +15,5 @@ export const appData = {
   betygMatris,
   kohort,
   tidigaSignaler,
+  kursplaner,
 };
